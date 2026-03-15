@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THUGKEED BOT PAIR</title>
+<style>
+body{
+  margin:0;
+  padding:0;
+  font-family:monospace;
+  background:black;
+  color:lime;
+  text-align:center;
+  overflow-x:hidden;
+}
+h1{
+  font-size:2em;
+  margin-bottom:10px;
+  animation: glow 1.5s infinite alternate;
+}
+p{
+  margin-bottom:15px;
+}
+.container{
+  max-width:450px;
+  margin:50px auto;
+  padding:30px;
+  border:2px solid lime;
+  border-radius:15px;
+  background:rgba(0,0,0,0.7);
+  box-shadow:0 0 20px lime;
+}
+input{
+  width:80%;
+  padding:10px;
+  font-size:16px;
+  margin-top:10px;
+  background:black;
+  color:lime;
+  border:1px solid lime;
+  border-radius:5px;
+  text-align:center;
+}
+button{
+  margin-top:15px;
+  padding:10px 20px;
+  background:lime;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+  border-radius:5px;
+  font-size:16px;
+  transition:0.3s;
+}
+button:hover{
+  background:#00ff00;
+  color:black;
+}
+#code{
+  margin-top:20px;
+  font-size:20px;
+  letter-spacing:3px;
+  font-weight:bold;
+}
+#loading{
+  margin-top:15px;
+  font-family:monospace;
+  color:yellow;
+  height:24px;
+}
+@keyframes glow {
+  from { text-shadow:0 0 5px lime,0 0 10px lime; }
+  to { text-shadow:0 0 20px lime,0 0 40px lime; }
+}
+footer{
+  margin-top:30px;
+  font-size:14px;
+  color:lime;
+}
+footer a{
+  color:lime;
+  text-decoration:none;
+  font-weight:bold;
+  margin:0 5px;
+}
+footer a:hover{
+  color:#00ff00;
+  text-shadow:0 0 5px lime;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>⚡ THUGKEED BOT PAIR</h1>
+  <p>Enter your WhatsApp number to get the pairing code:</p>
+  <input type="text" id="number" placeholder="234XXXXXXXXXX">
+  <br>
+  <button onclick="pair()">GENERATE CODE</button>
+
+  <div id="loading"></div>
+  <div id="code"></div>
+
+  <footer>
+    📱 WhatsApp: <a href="https://wa.me/YOUR_NUMBER" target="_blank">Chat Now</a> |
+    📘 Facebook: <a href="https://facebook.com/YOUR_FB_PROFILE" target="_blank">Profile</a> |
+    💻 GitHub: <a href="https://github.com/thugkeedxxx" target="_blank">thugkeedxxx</a> |
+    📘 FB Page: <a href="https://facebook.com/YOUR_FB_PAGE" target="_blank">Page</a>
+  </footer>
+</div>
+
+<script>
+async function pair(){
+  const number = document.getElementById("number").value
+  const codeEl = document.getElementById("code")
+  const loadEl = document.getElementById("loading")
+
+  if(!number){
+    alert("Enter your WhatsApp number first!")
+    return
+  }
+
+  codeEl.innerText = ""
+  loadEl.innerText = "⏳ Generating pairing code..."
+
+  try{
+    const res = await fetch(`/api/pair?number=${number}`)
+    const data = await res.json()
+
+    if(data.error){
+      loadEl.innerText = "❌ Error: "+data.error
+      return
+    }
+
+    const code = data.code
+    loadEl.innerText = ""
+
+    let idx = 0
+    const interval = setInterval(()=>{
+      if(idx >= code.length){
+        clearInterval(interval)
+        return
+      }
+      codeEl.innerText += code[idx]
+      idx++
+    },150)
+
+  }catch(err){
+    loadEl.innerText = "❌ Failed to generate code"
+    console.error(err)
+  }
+}
+</script>
+
+</body>
+  </html>
